@@ -1,15 +1,34 @@
-let createAndAppend = function({className, parentElement, value}, tag ='div'){
-    let element = document.createElement(tag);
-    element.className = className;
-    if(value){
-        element.innerHTML = value;
+const createDiv = (parent, classElem)=>{
+    let div = document.createElement('div');
+    div.classList.add(classElem);
+    parent.appendChild(div);
+    return div;
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+    let main = createDiv(document.querySelector('body'), 'main');
+    let game = createDiv(main, 'game');
+    let header = createDiv(game, 'header');
+    header.innerHTML = 'Score: ';
+    let field = createDiv(game, 'field');
+    
+    let arrCell = [];
+    for(let i = 0; i < 16; i++){
+        let cell = createDiv(field, 'cell');
+        arrCell.push(cell);
     }
-    parentElement.appendChild(element);
-    return element;
-}
+    
 
-let getRandomInt = function(min, max){
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+    
 
-var game = new Game(document.body, 4)
+
+
+
+
+
+
+
+
+
+
+});
