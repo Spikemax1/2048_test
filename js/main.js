@@ -1,8 +1,11 @@
-const createDiv = (parent, classElem)=>{
-    let div = document.createElement('div');
-    div.classList.add(classElem);
-    parent.appendChild(div);
-    return div;
+const createDiv = (parent, classElem, elem = 'div')=>{
+    elem = document.createElement(elem);
+    if(classElem){
+        elem.className = classElem;
+    }
+    
+    parent.appendChild(elem);
+    return elem;
 }
 
 document.addEventListener('DOMContentLoaded', ()=>{
@@ -13,7 +16,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
         let main = createDiv(document.querySelector('body'), 'main');
         let game = createDiv(main, 'game');
         let header = createDiv(game, 'header');
-        header.innerHTML = 'Score: ';
+        let scoreTitle = createDiv(header, '', 'span');
+        scoreTitle.innerHTML = 'Score: ';
+        let displayScore = createDiv(header, '', 'span');
+        let score = 0;
+        displayScore.innerHTML = score;
+        
         let field = createDiv(game, 'field');
         
         for(let i = 0; i < width * width; i++){
@@ -78,9 +86,33 @@ document.addEventListener('DOMContentLoaded', ()=>{
             }
         }
     }
+
+    //sum rows
+    function combineRow(){
+        for(let i=0; i < 15; i++){
+            if(arrCell[i].innerHTML === arrCell[i+1].innerHTML && arrCell[i].innerHTML != ''){
+                let combinedTotal = parseInt(arrCell[i].innerHTML) + parseInt(arrCell[i+1].innerHTML);
+                arrCell[i].innerHTML = combinedTotal;
+                arrCell[i+1].innerHTML = '';
+                score += combinedTotal;
+                scoreDisplay.innerHTML = score;
+            }
+        }
+    }
+
+    //sum columns
+    function combineColumn(){
+        for(let i=0; i < 12; i++){
+            if(arrCell[i].innerHTML === arrCell[i+width].innerHTML && arrCell[i].innerHTML != ''){
+                let combinedTotal = parseInt(arrCell[i].innerHTML) + parseInt(arrCell[i+width].innerHTML);
+                arrCell[i].innerHTML = combinedTotal;
+                arrCell[i+width].innerHTML = '';
+                score += combinedTotal;
+                scoreDisplay.innerHTML = score;
+            }
+        }
+    }
     
-
-
 
 
 
