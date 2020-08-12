@@ -112,12 +112,91 @@ document.addEventListener('DOMContentLoaded', ()=>{
             }
         }
     }
+
+    //swipe down
+  function moveDown(){
+    for(let i=0; i< 4; i++){
+        let totalOne = parseInt(arrCell[i].innerHTML);
+        let totalTwo = parseInt(arrCell[i+width].innerHTML);
+        let totalThree = parseInt(arrCell[i+width * 2].innerHTML);
+        let totalFour = parseInt(arrCell[i+width * 3].innerHTML);
+        let column = [totalOne, totalTwo, totalThree, totalFour];
+
+        let filteredColumn = column.filter(num => num);
+        let missing = 4 - filteredColumn.length;
+        let zeros = Array(missing).fill('');
+        let newColumn = zeros.concat(filteredColumn);
+
+        arrCell[i].innerHTML = newColumn[0];
+        arrCell[i+width].innerHTML = newColumn[1];
+        arrCell[i+width*2].innerHTML = newColumn[2];
+        arrCell[i+width*3].innerHTML = newColumn[3];
+
+    }
+}
+    //swipe up
+    function moveUp(){
+        for(let i=0; i< 4; i++){
+            let totalOne = parseInt(arrCell[i].innerHTML);
+            let totalTwo = parseInt(arrCell[i+width].innerHTML);
+            let totalThree = parseInt(arrCell[i+width * 2].innerHTML);
+            let totalFour = parseInt(arrCell[i+width * 3].innerHTML);
+            let column = [totalOne, totalTwo, totalThree, totalFour];
     
+            let filteredColumn = column.filter(num => num);
+            let missing = 4 - filteredColumn.length;
+            let zeros = Array(missing).fill('');
+            let newColumn = filteredColumn.concat(zeros);
+    
+            arrCell[i].innerHTML = newColumn[0];
+            arrCell[i+width].innerHTML = newColumn[1];
+            arrCell[i+width*2].innerHTML = newColumn[2];
+            arrCell[i+width*3].innerHTML = newColumn[3];
+    
+        }
+    }
 
+    //assign keycodes
+  function control(e) {
+    if(e.keyCode === 39){
+        keyRight()
+    }else if(e.keyCode ===37){
+        keyLeft()
+    }else if(e.keyCode === 38){
+        keyUp();
+    }else if(e.keyCode === 40){
+        keyDown();
+    }
 
+}
+document.addEventListener('keyup', control)
 
+    function keyRight(){
+        moveRight();
+        combineRow();
+        moveRight();
+        generate();
+    }
 
+    function keyLeft(){
+        moveLeft();
+        combineRow();
+        moveLeft();
+        generate();
+    }
 
+    function keyDown(){
+        moveDown();
+        combineColumn();
+        moveDown();
+        generate();
+    }
+    function keyUp(){
+        moveUp();
+        combineColumn();
+        moveUp();
+        generate();
+    }
 
 
 
