@@ -11,6 +11,8 @@ const createDiv = (parent, classElem, elem = 'div')=>{
 document.addEventListener('DOMContentLoaded', ()=>{
     let arrCell = [];
     let width = 4;
+    let score = 0;
+    let displayScore;
     
     const createBoard = ()=>{
         let main = createDiv(document.querySelector('body'), 'main');
@@ -18,8 +20,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         let header = createDiv(game, 'header');
         let scoreTitle = createDiv(header, '', 'span');
         scoreTitle.innerHTML = 'Score: ';
-        let displayScore = createDiv(header, '', 'span');
-        let score = 0;
+        displayScore = createDiv(header, '', 'span');        
         displayScore.innerHTML = score;
         
         let field = createDiv(game, 'field');
@@ -39,6 +40,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         if(arrCell[randomNumber].innerHTML == ''){
             arrCell[randomNumber].innerHTML = 2;
         }else{generate()}
+        checkForWin();
     }
     
     //swipe right
@@ -95,9 +97,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
                 arrCell[i].innerHTML = combinedTotal;
                 arrCell[i+1].innerHTML = '';
                 score += combinedTotal;
-                scoreDisplay.innerHTML = score;
+                displayScore.innerHTML = score;
             }
         }
+        checkForWin()
     }
 
     //sum columns
@@ -108,9 +111,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
                 arrCell[i].innerHTML = combinedTotal;
                 arrCell[i+width].innerHTML = '';
                 score += combinedTotal;
-                scoreDisplay.innerHTML = score;
+                displayScore.innerHTML = score;
             }
         }
+        checkForWin()
     }
 
     //swipe down
@@ -198,8 +202,31 @@ document.addEventListener('keyup', control)
         generate();
     }
 
+//check for the number 2048 in the arrCell to win
 
+function checkForWin(){
+    for(let i=0; i < arrCell.length; i++){
+        if(arrCell[i].innerHTML == 32){
+            displayScore.innerHTML = 'You win!';
+            document.removeEventListener('keyup', control);
+        }
+    }
+}
 
+//check if there are no zeros on the board to lose
+
+function checkForGameOver(){
+    let zeros = 0;
+    for(let i = 0; i < arrCell.length; i++){
+        if(arrCell[i].innerHTML == ''){
+            zeros++
+        }
+    }
+    if(zeros === 0){
+        displayScore.innerHTML = 'You lose!';
+        document.removeEventListener('keyup', control);
+    }
+}
 
 
 
