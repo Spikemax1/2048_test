@@ -46,4 +46,9 @@ html, body{
             border: 2px solid green;
             border-radius: 2vmin;
             font-size: 10vmin;
+            background-color: beige;
+        }
+
+        .game .field .colored{
+            background-color: cornflowerblue;
         }

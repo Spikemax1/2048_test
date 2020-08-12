@@ -39,8 +39,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
         let randomNumber = Math.floor(Math.random() * Math.floor(arrCell.length));
         if(arrCell[randomNumber].innerHTML == ''){
             arrCell[randomNumber].innerHTML = 2;
+            arrCell[randomNumber].classList.add('colored');
         }else{generate()}
         checkForWin();
+        checkForGameOver();
     }
     
     //swipe right
@@ -94,8 +96,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
         for(let i=0; i < 15; i++){
             if(arrCell[i].innerHTML === arrCell[i+1].innerHTML && arrCell[i].innerHTML != ''){
                 let combinedTotal = parseInt(arrCell[i].innerHTML) + parseInt(arrCell[i+1].innerHTML);
-                arrCell[i].innerHTML = combinedTotal;
-                arrCell[i+1].innerHTML = '';
+                arrCell[i+1].innerHTML = combinedTotal;
+                arrCell[i].innerHTML = '';
                 score += combinedTotal;
                 displayScore.innerHTML = score;
             }
@@ -108,8 +110,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
         for(let i=0; i < 12; i++){
             if(arrCell[i].innerHTML === arrCell[i+width].innerHTML && arrCell[i].innerHTML != ''){
                 let combinedTotal = parseInt(arrCell[i].innerHTML) + parseInt(arrCell[i+width].innerHTML);
-                arrCell[i].innerHTML = combinedTotal;
-                arrCell[i+width].innerHTML = '';
+                arrCell[i+width].innerHTML = combinedTotal;
+                arrCell[i].innerHTML = '';
                 score += combinedTotal;
                 displayScore.innerHTML = score;
             }
@@ -173,7 +175,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
 
 }
-document.addEventListener('keyup', control)
+document.addEventListener('keyup', control);
 
     function keyRight(){
         moveRight();
@@ -206,7 +208,10 @@ document.addEventListener('keyup', control)
 
 function checkForWin(){
     for(let i=0; i < arrCell.length; i++){
-        if(arrCell[i].innerHTML == 32){
+        if(arrCell[i].innerHTML == '') arrCell[i].classList.remove('colored');
+        else arrCell[i].classList.add('colored');
+
+        if(arrCell[i].innerHTML == 2048){
             displayScore.innerHTML = 'You win!';
             document.removeEventListener('keyup', control);
         }
@@ -215,6 +220,33 @@ function checkForWin(){
 
 //check if there are no zeros on the board to lose
 
+function checkNoMove(){
+    let result = false;
+    let count = 0;
+    for(let i = 0; i < width; i++){
+        let arrRow = arrCell.slice(count, width+count);
+        let arrCol = [arrCell[i], arrCell[i+width], arrCell[i+width*2], arrCell[i+width*3]];
+        let checkRow = 0;
+        let checkCol = 0;
+        
+        for(let k = 0; k < arrRow.length; k++){
+            if(checkRow === arrRow[k].innerHTML){
+                result = true;
+            }
+            checkRow = arrRow[k].innerHTML == '' ? 0 : arrRow[k].innerHTML;       
+        }
+        count += width;
+
+        for(let l = 0; l < arrCol.length; l++){
+            if(checkRow === arrCol[l].innerHTML){
+                result = true;
+            }
+            checkCol = arrRow[l].innerHTML == '' ? 0 : arrRow[l].innerHTML;        
+        }        
+    }
+    return result;    
+}
+
 function checkForGameOver(){
     let zeros = 0;
     for(let i = 0; i < arrCell.length; i++){
@@ -222,7 +254,7 @@ function checkForGameOver(){
             zeros++
         }
     }
-    if(zeros === 0){
+    if(zeros === 0 && !checkNoMove()){
         displayScore.innerHTML = 'You lose!';
         document.removeEventListener('keyup', control);
     }
